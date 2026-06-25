@@ -106,4 +106,4 @@ Before creating a new issue:
 Please follow our Code of Conduct and help maintain a welcoming and respectful environment.
 
 Thank you for helping improve DevLink.
-````
+
