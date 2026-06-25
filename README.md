@@ -1,7 +1,7 @@
 # DevLink
 
 <p align="center">
-  <img src=""C:\Users\Lenovo\OneDrive\Documents\devlink\lodo-dev.jpeg"" width="700">
+  <img src="docs/images/devlink-banner.jpeg" alt="DevLink Banner" width="700">
 </p>
 
 <h1 align="center">DevLink</h1>
