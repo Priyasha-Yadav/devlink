@@ -1,4 +1,4 @@
-````md
+
 # Contributing to DevLink
 
 Thank you for your interest in contributing to DevLink.
