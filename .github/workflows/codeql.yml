@@ -1,0 +1,14 @@
+name: CodeQL
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  security-events: write
+  contents: read
+
+jobs:
+  analyze:
+    uses: github/codeql-action/.github/workflows/codeql.yml@v3
