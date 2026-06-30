@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import AuthScreen from "../pages/AuthScreen";
+
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import Dashboard from "./screens/Dashboard";
 import Discover from "./screens/Discover";
@@ -12,11 +13,11 @@ import Settings from "./screens/Settings";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     Component: AuthScreen,
   },
   {
-    path: "/dashboard",
+    path: "/",
     Component: DashboardLayout,
     children: [
       { index: true, Component: Dashboard },
