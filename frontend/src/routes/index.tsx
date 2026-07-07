@@ -291,9 +291,20 @@ function Landing() {
             <span className="text-[12px] text-muted-foreground">© {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-5 text-[12px] text-muted-foreground">
-            {["Privacy", "Security", "Terms", "Status"].map((l) => (
-              <a key={l} href="#" className="hover:text-primary hover:underline">
-                {l}
+            {[
+              { label: "GitHub", href: "https://github.com/nensii21/devlink" },
+              { label: "Privacy Policy", href: "#" },
+              { label: "Terms", href: "#" },
+              { label: "Contact", href: "#" },
+            ].map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="hover:text-primary hover:underline"
+              >
+                {item.label}
               </a>
             ))}
           </div>
