@@ -283,12 +283,12 @@ function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-border bg-surface">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 sm:px-6">
+      <footer className="border-t border-border bg-surface py-6">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-2 sm:flex-row sm:text-left">
           <div className="flex items-center gap-2">
-            <img src={APP_LOGO} alt="" className="h-6 w-6 rounded" />
-            <span className="text-[13px] font-semibold text-foreground">DevLink</span>
-            <span className="text-[12px] text-muted-foreground">© {new Date().getFullYear()}</span>
+            <img src={APP_LOGO} alt="Devlink Logo" className="h-8 w-8 rounded" />
+            <span className="text-[13px] font-bold text-foreground ">DevLink</span>
+            <span className="text-[11px] text-muted-foreground opacity-70">© {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-5 text-[12px] text-muted-foreground">
             {[
