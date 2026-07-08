@@ -6,6 +6,12 @@ import { ArrowLeft, Star, GitFork, Users2, Github, Copy, Check } from "lucide-re
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { builders, activity, currentUser } from "@/mocks/seed";
+import { Markdown } from "@/components/shared/Markdown";
+import { ArrowLeft, Star, GitFork, Users2, Github } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { builders, activity } from "@/mocks/seed";
+import { BackButton } from "@/components/shared/BackButton";
 
 export const Route = createFileRoute("/_app/projects/$projectId")({
   head: ({ params }) => ({
@@ -49,6 +55,10 @@ function ProjectDetail() {
       >
         <ArrowLeft size={14} /> Back to projects
       </Link>
+      <BackButton
+  to="/projects"
+  label="Back to projects"
+/>
       <Card className="p-5">
         <div className="flex items-start gap-4">
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-md bg-muted text-3xl">
@@ -87,6 +97,16 @@ function ProjectDetail() {
                 <Users2 size={12} /> {p.members}
               </span>
             </div>
+          <div className="hidden gap-4 text-[12px] text-muted-foreground sm:flex">
+            <span className="inline-flex items-center gap-1">
+              <Star size={12} /> {p.stars}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <GitFork size={12} /> {p.forks}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Users2 size={12} /> {p.members}
+            </span>
           </div>
         </div>
       </Card>
@@ -112,7 +132,7 @@ function ProjectDetail() {
         <div className="grid gap-4 lg:grid-cols-3">
           <Card className="p-4 lg:col-span-2">
             <p className="text-[13px] font-semibold text-foreground">About</p>
-            <p className="mt-2 text-[13px] text-muted-foreground">{p.description}</p>
+            <Markdown content={p.description} className="mt-2 text-muted-foreground" />
             <p className="mt-4 text-[13px] font-semibold text-foreground">Progress</p>
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
               <div className="h-full bg-primary" style={{ width: `${p.progress}%` }} />
