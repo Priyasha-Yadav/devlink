@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouterState, Outlet } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { projectsService } from "@/services";
 import { Card, TagChip, SectionHeader } from "@/components/shared/primitives";
@@ -16,9 +16,19 @@ export const Route = createFileRoute("/_app/projects")({
 });
 
 function ProjectsPage() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<"all" | "active" | "planning" | "shipped">("all");
-  const { data = [], isLoading } = useQuery({ queryKey: ["projects"], queryFn: projectsService.list });
+  const { data = [], isLoading } = useQuery({
+    queryKey: ["projects"],
+    queryFn: projectsService.list,
+  });
+
+  const isDetails = pathname.split("/").filter(Boolean).length > 1;
+
+  if (isDetails) {
+    return <Outlet />;
+  }
 
   const filtered = data.filter(
     (p) =>
@@ -31,7 +41,9 @@ function ProjectsPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-[22px] font-bold tracking-tight text-foreground">Projects</h1>
-          <p className="text-[13px] text-muted-foreground">Everything you're building, in one place.</p>
+          <p className="text-[13px] text-muted-foreground">
+            Everything you're building, in one place.
+          </p>
         </div>
         <button className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground hover:opacity-90">
           <Plus size={14} /> New project
@@ -41,7 +53,10 @@ function ProjectsPage() {
       <Card className="p-3">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-0 flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Search
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
@@ -55,7 +70,9 @@ function ProjectsPage() {
                 key={f}
                 onClick={() => setFilter(f)}
                 className={`rounded px-2.5 py-1 text-[12px] font-medium capitalize transition-colors ${
-                  filter === f ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  filter === f
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {f}
@@ -87,7 +104,9 @@ function ProjectsPage() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[14px] font-semibold text-foreground">{p.name}</p>
-                    <p className="mt-0.5 line-clamp-2 text-[12px] text-muted-foreground">{p.description}</p>
+                    <p className="mt-0.5 line-clamp-2 text-[12px] text-muted-foreground">
+                      {p.description}
+                    </p>
                   </div>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-1">
@@ -114,11 +133,17 @@ function ProjectsPage() {
                   <span className="inline-flex items-center gap-1">
                     <GitFork size={12} /> {p.forks}
                   </span>
-                  <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
-                    p.status === "active" ? "bg-success/10 text-success" :
-                    p.status === "planning" ? "bg-warning/10 text-warning" :
-                    "bg-muted text-muted-foreground"
-                  }`}>{p.status}</span>
+                  <span
+                    className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
+                      p.status === "active"
+                        ? "bg-success/10 text-success"
+                        : p.status === "planning"
+                          ? "bg-warning/10 text-warning"
+                          : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {p.status}
+                  </span>
                 </div>
               </Card>
             </Link>
