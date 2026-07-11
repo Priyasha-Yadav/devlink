@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { projectsService } from "@/services";
-import { Card, TagChip, SectionHeader, Avatar } from "@/components/shared/primitives";
+import { Card, TagChip, Avatar } from "@/components/shared/primitives";
 import { ArrowLeft, Star, GitFork, Users2, Github, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -46,16 +46,7 @@ function ProjectDetail() {
 
   return (
     <div className="space-y-4">
-      <Link
-        to="/projects"
-        className="inline-flex items-center gap-1 text-[13px] font-medium text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft size={14} /> Back to projects
-      </Link>
-      <BackButton
-  to="/projects"
-  label="Back to projects"
-/>
+      <BackButton to="/projects" label="Back to projects" />
       <Card className="p-5">
         <div className="flex items-start gap-4">
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-md bg-muted text-3xl">
