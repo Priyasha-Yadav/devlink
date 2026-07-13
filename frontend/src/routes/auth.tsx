@@ -19,12 +19,17 @@ export const Route = createFileRoute("/auth")({
 
 const signInSchema = z.object({
   email: z.string().email("Enter a valid email"),
-  password: z.string().min(6, "At least 6 characters"),
+  password: z.string().min(8, "At least 8 characters"),
 });
 const signUpSchema = signInSchema
   .extend({
-    firstName: z.string().min(1, "Required").max(50),
-    lastName: z.string().min(1, "Required").max(50),
+    first_name: z.string().min(2, "At least 2 characters").max(100, "At most 100 characters"),
+    last_name: z.string().min(2, "At least 2 characters").max(100, "At most 100 characters"),
+    username: z
+      .string()
+      .min(3, "At least 3 characters")
+      .max(50, "At most 50 characters")
+      .regex(/^[a-zA-Z0-9_]+$/, "Letters, numbers, and underscores only"),
     confirmPassword: z.string(),
   })
   .refine((d) => d.password === d.confirmPassword, {
@@ -142,18 +147,25 @@ function AuthScreen() {
             <div className="mb-4 grid grid-cols-2 gap-3">
               <div>
                 <label className={lbl}>First name</label>
-                <input className={inp} {...signUpForm.register("firstName")} />
-                {signUpForm.formState.errors.firstName && (
-                  <p className={err}>{signUpForm.formState.errors.firstName.message}</p>
+                <input className={inp} {...signUpForm.register("first_name")} />
+                {signUpForm.formState.errors.first_name && (
+                  <p className={err}>{signUpForm.formState.errors.first_name.message}</p>
                 )}
               </div>
               <div>
                 <label className={lbl}>Last name</label>
-                <input className={inp} {...signUpForm.register("lastName")} />
-                {signUpForm.formState.errors.lastName && (
-                  <p className={err}>{signUpForm.formState.errors.lastName.message}</p>
+                <input className={inp} {...signUpForm.register("last_name")} />
+                {signUpForm.formState.errors.last_name && (
+                  <p className={err}>{signUpForm.formState.errors.last_name.message}</p>
                 )}
               </div>
+            </div>
+            <div className="mb-4">
+              <label className={lbl}>Username</label>
+              <input className={inp} {...signUpForm.register("username")} />
+              {signUpForm.formState.errors.username && (
+                <p className={err}>{signUpForm.formState.errors.username.message}</p>
+              )}
             </div>
             <div className="mb-4">
               <label className={lbl}>Email</label>
