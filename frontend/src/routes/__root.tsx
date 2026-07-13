@@ -32,14 +32,14 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background px-4">
       <div className="w-full max-w-md text-center">
-        <div ref={ref} className="mx-auto w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 bg-background [&_svg]:bg-transparent" />
+        <div
+          ref={ref}
+          className="mx-auto w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 bg-background [&_svg]:bg-transparent"
+        />
 
-        <h1 className="mt-6 text-2xl font-bold text-foreground sm:text-3xl">
-          Page not found
-        </h1>
+        <h1 className="mt-6 text-2xl font-bold text-foreground sm:text-3xl">Page not found</h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved to a new
-          address.
+          The page you're looking for doesn't exist or has been moved to a new address.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
