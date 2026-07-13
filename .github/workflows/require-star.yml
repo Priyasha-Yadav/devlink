@@ -14,6 +14,7 @@ jobs:
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
           USER: ${{ github.event.pull_request.user.login }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
@@ -23,7 +24,8 @@ jobs:
 
           while true; do
             USERS=$(curl -s "https://api.github.com/repos/$OWNER/$REPO/stargazers?per_page=100&page=$PAGE" \
-              -H "Accept: application/vnd.github+json")
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GH_TOKEN")
 
             COUNT=$(echo "$USERS" | jq length)
 
@@ -37,7 +39,7 @@ jobs:
           done
 
           if [ "$FOUND" = false ]; then
-            echo " Please star the repository before your pull request can be merged."
+            echo "Repository not starred by $USER. Please star $OWNER/$REPO before your pull request can be merged."
             exit 1
           fi
 
