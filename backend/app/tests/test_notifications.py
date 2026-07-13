@@ -1,12 +1,16 @@
 # pyrefly: ignore [missing-import]
 import pytest
 import uuid
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy import and_, select
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy import create_engine
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import sessionmaker
+
 # pyrefly: ignore [missing-import]
 from fastapi.testclient import TestClient
 
@@ -46,7 +50,6 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-
 @pytest.fixture(scope="function")
 def db():
     # Recreate schema for clean database per test
@@ -58,6 +61,7 @@ def db():
     finally:
         db.close()
 
+
 @pytest.fixture(scope="function")
 def client(db):
     def override_get_db():
@@ -65,9 +69,11 @@ def client(db):
             yield db
         finally:
             pass
+
     app.dependency_overrides[get_database] = override_get_db
     yield TestClient(app)
     app.dependency_overrides.clear()
+
 
 def create_test_user(db, email, username):
     user = User(
@@ -78,12 +84,13 @@ def create_test_user(db, email, username):
         password_hash="hashed_password",
         is_active=True,
         is_verified=True,
-        is_superuser=False
+        is_superuser=False,
     )
     db.add(user)
     db.commit()
     db.refresh(user)
     return user
+
 
 def create_test_project(db, owner_id):
     project = Project(
@@ -92,12 +99,13 @@ def create_test_project(db, owner_id):
         slug=f"test-project-{uuid.uuid4().hex[:6]}",
         description="A cool test project",
         stage=ProjectStage.IDEA,
-        visibility=ProjectVisibility.PUBLIC
+        visibility=ProjectVisibility.PUBLIC,
     )
     db.add(project)
     db.commit()
     db.refresh(project)
     return project
+
 
 def test_follow_notification(db):
     user1 = create_test_user(db, "user1@example.com", "user1")
@@ -118,17 +126,21 @@ def test_follow_notification(db):
     # Test duplicate prevention (sending again should reuse/update instead of creating new row)
     # We delete follower relationship first to allow refollow if needed, or trigger manually
     from app.schemas.notification import NotificationCreate
+
     notification_data = NotificationCreate(
         recipient_id=user2.id,
         type=NotificationType.FOLLOW,
         title="New Follower",
-        message="Test User started following you."
+        message="Test User started following you.",
     )
-    NotificationService.create_notification(db, recipient_id=user2.id, sender_id=user1.id, notification=notification_data)
-    
+    NotificationService.create_notification(
+        db, recipient_id=user2.id, sender_id=user1.id, notification=notification_data
+    )
+
     notifications = NotificationService.list_notifications(db, recipient_id=user2.id)
     # Still only 1 unread follow notification
     assert len(notifications) == 1
+
 
 def test_message_notification(db):
     user1 = create_test_user(db, "user1@example.com", "user1")
@@ -147,7 +159,9 @@ def test_message_notification(db):
 
     # User 1 sends message to conversation
     msg_create = MessageCreate(content="Hello there!", type=MessageType.TEXT)
-    MessageService.send_message(db, conversation_id=conv.id, sender_id=user1.id, message=msg_create)
+    MessageService.send_message(
+        db, conversation_id=conv.id, sender_id=user1.id, message=msg_create
+    )
 
     # User 2 should get notification, User 1 should not
     notif_user2 = NotificationService.list_notifications(db, recipient_id=user2.id)
@@ -157,6 +171,7 @@ def test_message_notification(db):
 
     notif_user1 = NotificationService.list_notifications(db, recipient_id=user1.id)
     assert len(notif_user1) == 0
+
 
 def test_application_notifications(db):
     owner = create_test_user(db, "owner@example.com", "owner")
@@ -169,7 +184,7 @@ def test_application_notifications(db):
         title="Frontend Developer",
         description="Looking for react developer",
         role="Frontend",
-        status=FlareStatus.OPEN
+        status=FlareStatus.OPEN,
     )
     db.add(flare)
     db.commit()
@@ -178,7 +193,11 @@ def test_application_notifications(db):
     # Applicant submits application
     app_create = ApplicationCreate(message="I want to join")
     application = ApplicationService.create_application(
-        db, applicant_id=applicant.id, project_id=project.id, flare_id=flare.id, application=app_create
+        db,
+        applicant_id=applicant.id,
+        project_id=project.id,
+        flare_id=flare.id,
+        application=app_create,
     )
 
     # Accept application
@@ -197,6 +216,7 @@ def test_application_notifications(db):
     assert len(notifs) == 1
     assert notifs[0].type == NotificationType.APPLICATION_REJECTED
 
+
 def test_project_invite_endpoint_and_notification(db, client):
     owner = create_test_user(db, "owner@example.com", "owner")
     invitee = create_test_user(db, "invitee@example.com", "invitee")
@@ -205,9 +225,7 @@ def test_project_invite_endpoint_and_notification(db, client):
     try:
         app.dependency_overrides[get_current_user] = lambda: owner
 
-        response = client.post(
-            f"/api/projects/{project.id}/invite/{invitee.id}"
-        )
+        response = client.post(f"/api/projects/{project.id}/invite/{invitee.id}")
 
     finally:
         app.dependency_overrides.pop(get_current_user, None)

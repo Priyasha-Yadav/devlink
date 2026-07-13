@@ -3,9 +3,11 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from typing import Optional
+
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 from app.models.organization import OrganizationType
+
 
 class OrganizationBase(BaseModel):
     name: str
@@ -23,8 +25,10 @@ class OrganizationBase(BaseModel):
     twitter_url: Optional[str] = None
     hiring: bool = False
 
+
 class OrganizationCreate(OrganizationBase):
     pass
+
 
 class OrganizationUpdate(BaseModel):
     name: Optional[str] = None
@@ -42,6 +46,7 @@ class OrganizationUpdate(BaseModel):
     twitter_url: Optional[str] = None
     hiring: Optional[bool] = None
     active: Optional[bool] = None
+
 
 class OrganizationResponse(OrganizationBase):
     model_config = ConfigDict(from_attributes=True)

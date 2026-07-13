@@ -3,9 +3,11 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from typing import Optional
+
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 from app.models.builder_flare import FlareStatus
+
 
 class BuilderFlareBase(BaseModel):
     title: str
@@ -18,8 +20,10 @@ class BuilderFlareBase(BaseModel):
     status: FlareStatus = FlareStatus.OPEN
     remote: bool = True
 
+
 class BuilderFlareCreate(BuilderFlareBase):
     project_id: uuid.UUID
+
 
 class BuilderFlareUpdate(BaseModel):
     title: Optional[str] = None
@@ -31,6 +35,7 @@ class BuilderFlareUpdate(BaseModel):
     openings: Optional[int] = None
     status: Optional[FlareStatus] = None
     remote: Optional[bool] = None
+
 
 class BuilderFlareResponse(BuilderFlareBase):
     model_config = ConfigDict(from_attributes=True)

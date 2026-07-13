@@ -5,6 +5,7 @@ from datetime import datetime
 
 # pyrefly: ignore [missing-import]
 from sqlalchemy import select
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -15,6 +16,7 @@ from app.schemas.notification import (
 )
 
 from app.schemas.notification import NotificationCreate
+
 
 class NotificationService:
     """
@@ -40,9 +42,13 @@ class NotificationService:
         if notification.project_id is not None:
             stmt = stmt.where(Notification.project_id == notification.project_id)
         if notification.conversation_id is not None:
-            stmt = stmt.where(Notification.conversation_id == notification.conversation_id)
+            stmt = stmt.where(
+                Notification.conversation_id == notification.conversation_id
+            )
         if notification.application_id is not None:
-            stmt = stmt.where(Notification.application_id == notification.application_id)
+            stmt = stmt.where(
+                Notification.application_id == notification.application_id
+            )
 
         existing = db.scalars(stmt).first()
         if existing:

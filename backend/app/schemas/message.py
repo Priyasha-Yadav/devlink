@@ -3,9 +3,11 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from typing import Optional
+
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 from app.models.message import MessageType
+
 
 class MessageBase(BaseModel):
     content: str
@@ -16,13 +18,16 @@ class MessageBase(BaseModel):
     attachment_size: Optional[int] = None
     mime_type: Optional[str] = None
 
+
 class MessageCreate(MessageBase):
     pass
+
 
 class MessageUpdate(BaseModel):
     content: Optional[str] = None
     is_edited: Optional[bool] = None
     is_deleted: Optional[bool] = None
+
 
 class MessageResponse(MessageBase):
     model_config = ConfigDict(from_attributes=True)

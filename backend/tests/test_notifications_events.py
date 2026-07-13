@@ -2,12 +2,16 @@ from __future__ import annotations
 
 # pyrefly: ignore [missing-import]
 import pytest
+
 # pyrefly: ignore [missing-import]
 from fastapi.testclient import TestClient
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy import create_engine
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import sessionmaker
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.pool import StaticPool
 
@@ -47,14 +51,19 @@ def setup_db():
     app.dependency_overrides.clear()
 
 
-def _register_and_login(client: TestClient, email: str, username: str) -> tuple[str, str]:
-    client.post("/api/auth/register", json={
-        "first_name": username.capitalize(),
-        "last_name": "User",
-        "email": email,
-        "username": username,
-        "password": "Passw0rd!",
-    })
+def _register_and_login(
+    client: TestClient, email: str, username: str
+) -> tuple[str, str]:
+    client.post(
+        "/api/auth/register",
+        json={
+            "first_name": username.capitalize(),
+            "last_name": "User",
+            "email": email,
+            "username": username,
+            "password": "Passw0rd!",
+        },
+    )
     r = client.post("/api/auth/login", json={"email": email, "password": "Passw0rd!"})
     token = r.json()["access_token"]
     me = client.get("/api/users/me", headers={"Authorization": f"Bearer {token}"})
@@ -69,10 +78,14 @@ def test_follow_creates_notification():
     r = client.post(f"/followers/{a_id}", headers={"Authorization": f"Bearer {b_tok}"})
     assert r.status_code == 201
 
-    notifs = client.get("/api/notifications/", headers={"Authorization": f"Bearer {a_tok}"}).json()
+    notifs = client.get(
+        "/api/notifications/", headers={"Authorization": f"Bearer {a_tok}"}
+    ).json()
     assert any(n["type"] == "follow" for n in notifs)
 
-    b_notifs = client.get("/api/notifications/", headers={"Authorization": f"Bearer {b_tok}"}).json()
+    b_notifs = client.get(
+        "/api/notifications/", headers={"Authorization": f"Bearer {b_tok}"}
+    ).json()
     assert all(n["type"] != "follow" for n in b_notifs)
 
 
@@ -87,6 +100,7 @@ def test_no_self_notification():
 def test_notify_returns_none_when_recipient_is_sender():
     from app.services.notification_service import NotificationService
     from app.models.notification import NotificationType
+
     db = TestingSessionLocal()
     result = NotificationService.notify(
         db,

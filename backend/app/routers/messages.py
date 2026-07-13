@@ -4,6 +4,7 @@ import uuid
 
 # pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -16,6 +17,7 @@ from app.schemas.message import (
     MessageUpdate,
 )
 from app.services.message_service import MessageService
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy import select
 
@@ -152,7 +154,6 @@ def update_message(
     message_id: uuid.UUID,
     message: MessageUpdate,
     db: Session = Depends(get_database),
-
 ):
 
     db_message = MessageService.get_message(

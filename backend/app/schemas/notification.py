@@ -4,16 +4,15 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 
 from app.models.notification import NotificationType
 
-
 # ==========================================================
 # Base
 # ==========================================================
+
 
 class NotificationBase(BaseModel):
     recipient_id: uuid.UUID
@@ -34,6 +33,7 @@ class NotificationBase(BaseModel):
 # Create
 # ==========================================================
 
+
 class NotificationCreate(NotificationBase):
     pass
 
@@ -41,6 +41,7 @@ class NotificationCreate(NotificationBase):
 # ==========================================================
 # Update
 # ==========================================================
+
 
 class NotificationUpdate(BaseModel):
     is_read: Optional[bool] = None
@@ -53,6 +54,7 @@ class NotificationUpdate(BaseModel):
 # ==========================================================
 # Response
 # ==========================================================
+
 
 class NotificationResponse(NotificationBase):
     model_config = ConfigDict(from_attributes=True)

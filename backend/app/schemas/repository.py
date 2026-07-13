@@ -1,11 +1,14 @@
 from __future__ import annotations
+
 # pyrefly: ignore [missing-import]
 import uuid
 from datetime import datetime
 from typing import Optional
+
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 from app.models.repository import RepositoryProvider
+
 
 class RepositoryBase(BaseModel):
     provider: RepositoryProvider
@@ -27,8 +30,10 @@ class RepositoryBase(BaseModel):
     is_private: bool = False
     archived: bool = False
 
+
 class RepositoryCreate(RepositoryBase):
     project_id: uuid.UUID
+
 
 class RepositoryUpdate(BaseModel):
     provider: Optional[RepositoryProvider] = None
@@ -50,6 +55,7 @@ class RepositoryUpdate(BaseModel):
     is_private: Optional[bool] = None
     archived: Optional[bool] = None
     synced: Optional[bool] = None
+
 
 class RepositoryResponse(RepositoryBase):
     model_config = ConfigDict(from_attributes=True)

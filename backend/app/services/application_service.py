@@ -4,10 +4,13 @@ import uuid
 
 # pyrefly: ignore [missing-import]
 from fastapi import HTTPException, status
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy import select
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.exc import IntegrityError
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -68,9 +71,9 @@ class ApplicationService:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="You have already applied to this project.",
-       )
+            )
         db.refresh(db_application)
-        return db_application    
+        return db_application
 
     @staticmethod
     def get_application(
@@ -129,9 +132,11 @@ class ApplicationService:
         db.refresh(db_application)
 
         # Trigger notification
-        project_title = db_application.project.title if db_application.project else "Project"
+        project_title = (
+            db_application.project.title if db_application.project else "Project"
+        )
         owner_id = db_application.project.owner_id if db_application.project else None
-        
+
         notification_data = NotificationCreate(
             recipient_id=db_application.applicant_id,
             type=NotificationType.APPLICATION_ACCEPTED,
@@ -139,13 +144,13 @@ class ApplicationService:
             message=f"Your application for project '{project_title}' has been accepted!",
             action_url=f"/projects/{db_application.project_id}",
             project_id=db_application.project_id,
-            application_id=db_application.id
+            application_id=db_application.id,
         )
         NotificationService.create_notification(
             db=db,
             recipient_id=db_application.applicant_id,
             sender_id=owner_id,
-            notification=notification_data
+            notification=notification_data,
         )
 
         return db_application
@@ -162,9 +167,11 @@ class ApplicationService:
         db.refresh(db_application)
 
         # Trigger notification
-        project_title = db_application.project.title if db_application.project else "Project"
+        project_title = (
+            db_application.project.title if db_application.project else "Project"
+        )
         owner_id = db_application.project.owner_id if db_application.project else None
-        
+
         notification_data = NotificationCreate(
             recipient_id=db_application.applicant_id,
             type=NotificationType.APPLICATION_REJECTED,
@@ -172,13 +179,13 @@ class ApplicationService:
             message=f"Your application for project '{project_title}' has been rejected.",
             action_url=f"/projects/{db_application.project_id}",
             project_id=db_application.project_id,
-            application_id=db_application.id
+            application_id=db_application.id,
         )
         NotificationService.create_notification(
             db=db,
             recipient_id=db_application.applicant_id,
             sender_id=owner_id,
-            notification=notification_data
+            notification=notification_data,
         )
 
         return db_application

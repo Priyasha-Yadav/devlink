@@ -3,9 +3,11 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from typing import Optional
+
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 from app.models.project import ProjectStage, ProjectVisibility
+
 
 class ProjectBase(BaseModel):
     title: str
@@ -24,8 +26,10 @@ class ProjectBase(BaseModel):
     logo_url: Optional[str] = None
     banner_url: Optional[str] = None
 
+
 class ProjectCreate(ProjectBase):
     pass
+
 
 class ProjectUpdate(BaseModel):
     title: Optional[str] = None
@@ -43,6 +47,7 @@ class ProjectUpdate(BaseModel):
     hiring: Optional[bool] = None
     logo_url: Optional[str] = None
     banner_url: Optional[str] = None
+
 
 class ProjectResponse(ProjectBase):
     model_config = ConfigDict(from_attributes=True)

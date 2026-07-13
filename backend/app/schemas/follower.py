@@ -2,18 +2,16 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-# pyrefly: ignore [missing-import]
-from pydantic import BaseModel, ConfigDict
-
 
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 
+# pyrefly: ignore [missing-import]
+from pydantic import BaseModel, ConfigDict
 
 # ==========================================================
 # Follower Response
 # ==========================================================
-
 
 
 class FollowerResponse(BaseModel):
@@ -23,7 +21,6 @@ class FollowerResponse(BaseModel):
     follower_id: uuid.UUID
     following_id: uuid.UUID
     created_at: datetime
-
 
 
 # ==========================================================
@@ -62,4 +59,3 @@ class UnfollowResponse(BaseModel):
     message: str
     follower_count: int
     following_count: int
-

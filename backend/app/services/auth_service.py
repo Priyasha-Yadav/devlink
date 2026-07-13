@@ -5,8 +5,10 @@ from typing import Optional
 
 # pyrefly: ignore [missing-import]
 from fastapi import HTTPException, status
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy import select
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -156,7 +158,6 @@ class AuthService:
             "token_type": "bearer",
             "user": user,
         }
-
 
     # =====================================================
     # Get User by ID

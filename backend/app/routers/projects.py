@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import uuid
+
 # pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
@@ -371,8 +373,10 @@ def invite_user(
         )
 
     from app.models.project_member import ProjectMember, MemberRole
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy import and_, select
+
     existing_member = db.scalar(
         select(ProjectMember).where(
             and_(

@@ -1,12 +1,16 @@
 from __future__ import annotations
+
 # pyrefly: ignore [missing-import]
 import uuid
+
 # pyrefly: ignore [missing-import]
 from datetime import datetime
 from typing import Optional
+
 # pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
 from app.models.application import ApplicationStatus
+
 
 class ApplicationBase(BaseModel):
     message: Optional[str] = None
@@ -14,8 +18,10 @@ class ApplicationBase(BaseModel):
     github_url: Optional[str] = None
     resume_url: Optional[str] = None
 
+
 class ApplicationCreate(ApplicationBase):
     pass
+
 
 class ApplicationUpdate(BaseModel):
     status: Optional[ApplicationStatus] = None
@@ -25,6 +31,7 @@ class ApplicationUpdate(BaseModel):
     resume_url: Optional[str] = None
     review_notes: Optional[str] = None
     shortlisted: Optional[bool] = None
+
 
 class ApplicationResponse(ApplicationBase):
     model_config = ConfigDict(from_attributes=True)

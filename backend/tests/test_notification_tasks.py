@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import uuid
@@ -8,7 +7,6 @@ from app.tasks.notification_tasks import send_notification_task
 from app.models.notification import Notification, NotificationType
 from app.database.base import Base
 
-
 celery_app.conf.task_always_eager = True
 celery_app.conf.task_eager_propagates = True
 
@@ -16,8 +14,10 @@ celery_app.conf.task_eager_propagates = True
 def test_task_creates_notification():
     # pyrefly: ignore [missing-import]
     from sqlalchemy import create_engine
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy.orm import sessionmaker
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy.pool import StaticPool
 
@@ -69,8 +69,10 @@ def test_task_creates_notification():
 def test_task_skips_self_notification():
     # pyrefly: ignore [missing-import]
     from sqlalchemy import create_engine
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy.orm import sessionmaker
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy.pool import StaticPool
 
@@ -113,10 +115,13 @@ def test_task_skips_self_notification():
 def test_router_enqueue_integration():
     # pyrefly: ignore [missing-import]
     from fastapi.testclient import TestClient
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy import create_engine
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy.orm import sessionmaker
+
     # pyrefly: ignore [missing-import]
     from sqlalchemy.pool import StaticPool
 
@@ -124,6 +129,7 @@ def test_router_enqueue_integration():
     from app.dependencies import get_database
     from app.main import app
     from app.database.session import SessionLocal as RealSessionLocal
+
     engine = create_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
@@ -138,7 +144,7 @@ def test_router_enqueue_integration():
         print("USING SQLITE TEST DATABASE")
 
         db = TestingSessionLocal()
-        
+
         try:
             yield db
         finally:
@@ -148,30 +154,30 @@ def test_router_enqueue_integration():
 
     client = TestClient(app)
 
-    client.post("/api/auth/register", json={
-        "first_name": "Alice",
-        "last_name": "User",
-        "email": "alice2@x.com",
-        "username": "alice2",
-        "password": "Passw0rd!",
-    })
-
+    client.post(
+        "/api/auth/register",
+        json={
+            "first_name": "Alice",
+            "last_name": "User",
+            "email": "alice2@x.com",
+            "username": "alice2",
+            "password": "Passw0rd!",
+        },
+    )
 
     r = client.post(
-    "/api/auth/login",
-    json={
-        "email": "alice2@x.com",
-        "password": "Passw0rd!",
-    },
+        "/api/auth/login",
+        json={
+            "email": "alice2@x.com",
+            "password": "Passw0rd!",
+        },
     )
 
     a_tok = r.json()["access_token"]
 
     a_me = client.get(
-    "/api/users/me",
-    headers={
-        "Authorization": f"Bearer {a_tok}"
-    },
+        "/api/users/me",
+        headers={"Authorization": f"Bearer {a_tok}"},
     )
 
     print("STATUS:", a_me.status_code)
@@ -180,23 +186,22 @@ def test_router_enqueue_integration():
     a_id = a_me.json()["id"]
 
     client.post(
-    "/api/auth/register",
-    json={
-        "first_name": "Bob",
-        "last_name": "User",
-        "email": "bob2@x.com",
-        "username": "bob2",
-        "password": "Passw0rd!",
-    },
+        "/api/auth/register",
+        json={
+            "first_name": "Bob",
+            "last_name": "User",
+            "email": "bob2@x.com",
+            "username": "bob2",
+            "password": "Passw0rd!",
+        },
     )
 
-
     r = client.post(
-    "/api/auth/login",
-    json={
-        "email": "bob2@x.com",
-        "password": "Passw0rd!",
-    },
+        "/api/auth/login",
+        json={
+            "email": "bob2@x.com",
+            "password": "Passw0rd!",
+        },
     )
 
     b_tok = r.json()["access_token"]
@@ -204,7 +209,9 @@ def test_router_enqueue_integration():
     r = client.post(f"/followers/{a_id}", headers={"Authorization": f"Bearer {b_tok}"})
     assert r.status_code == 201
 
-    notifs = client.get("/api/notifications/", headers={"Authorization": f"Bearer {a_tok}"}).json()
+    notifs = client.get(
+        "/api/notifications/", headers={"Authorization": f"Bearer {a_tok}"}
+    ).json()
     assert any(n["type"] == "follow" for n in notifs)
 
     app.dependency_overrides.clear()
