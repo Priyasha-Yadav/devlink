@@ -4,15 +4,15 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
-
+# pyrefly: ignore [missing-import]
+from pydantic import BaseModel, ConfigDict
 from app.models.project import ProjectStage, ProjectVisibility
 
 
-class ProjectCreate(BaseModel):
-    title: str = Field(..., min_length=1, max_length=200)
-    slug: str = Field(..., min_length=1, max_length=200)
-    tagline: Optional[str] = Field(None, max_length=255)
+class ProjectBase(BaseModel):
+    title: str
+    slug: str
+    tagline: Optional[str] = None
     description: str
     stage: ProjectStage = ProjectStage.IDEA
     visibility: ProjectVisibility = ProjectVisibility.PUBLIC
@@ -23,12 +23,18 @@ class ProjectCreate(BaseModel):
     team_size: int = 1
     max_team_size: int = 5
     hiring: bool = True
+    logo_url: Optional[str] = None
+    banner_url: Optional[str] = None
+
+
+class ProjectCreate(ProjectBase):
+    pass
 
 
 class ProjectUpdate(BaseModel):
-    title: Optional[str] = Field(None, min_length=1, max_length=200)
-    slug: Optional[str] = Field(None, min_length=1, max_length=200)
-    tagline: Optional[str] = Field(None, max_length=255)
+    title: Optional[str] = None
+    slug: Optional[str] = None
+    tagline: Optional[str] = None
     description: Optional[str] = None
     stage: Optional[ProjectStage] = None
     visibility: Optional[ProjectVisibility] = None
@@ -43,26 +49,11 @@ class ProjectUpdate(BaseModel):
     banner_url: Optional[str] = None
 
 
-class ProjectResponse(BaseModel):
+class ProjectResponse(ProjectBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
     owner_id: uuid.UUID
-    title: str
-    slug: str
-    tagline: Optional[str] = None
-    description: str
-    stage: ProjectStage
-    visibility: ProjectVisibility
-    tech_stack: Optional[str] = None
-    repository_url: Optional[str] = None
-    website_url: Optional[str] = None
-    demo_url: Optional[str] = None
-    team_size: int
-    max_team_size: int
-    hiring: bool
-    logo_url: Optional[str] = None
-    banner_url: Optional[str] = None
     stars: int
     views: int
     applications_count: int

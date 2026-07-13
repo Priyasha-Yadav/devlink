@@ -1,21 +1,26 @@
 from __future__ import annotations
 
+# pyrefly: ignore [missing-import]
 import uuid
+
+# pyrefly: ignore [missing-import]
 from datetime import datetime
 from typing import Optional
 
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
-
 from app.models.application import ApplicationStatus
 
 
-class ApplicationCreate(BaseModel):
-    project_id: uuid.UUID
-    flare_id: uuid.UUID
+class ApplicationBase(BaseModel):
     message: Optional[str] = None
     portfolio_url: Optional[str] = None
     github_url: Optional[str] = None
     resume_url: Optional[str] = None
+
+
+class ApplicationCreate(ApplicationBase):
+    pass
 
 
 class ApplicationUpdate(BaseModel):
@@ -28,7 +33,7 @@ class ApplicationUpdate(BaseModel):
     shortlisted: Optional[bool] = None
 
 
-class ApplicationResponse(BaseModel):
+class ApplicationResponse(ApplicationBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
@@ -36,10 +41,6 @@ class ApplicationResponse(BaseModel):
     project_id: uuid.UUID
     flare_id: uuid.UUID
     status: ApplicationStatus
-    message: Optional[str] = None
-    portfolio_url: Optional[str] = None
-    github_url: Optional[str] = None
-    resume_url: Optional[str] = None
     review_notes: Optional[str] = None
     shortlisted: bool
     created_at: datetime

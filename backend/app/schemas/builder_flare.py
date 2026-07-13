@@ -4,13 +4,12 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
-
 from app.models.builder_flare import FlareStatus
 
 
-class BuilderFlareCreate(BaseModel):
-    project_id: uuid.UUID
+class BuilderFlareBase(BaseModel):
     title: str
     description: str
     role: str
@@ -18,7 +17,12 @@ class BuilderFlareCreate(BaseModel):
     commitment: Optional[str] = None
     experience_level: Optional[str] = None
     openings: int = 1
+    status: FlareStatus = FlareStatus.OPEN
     remote: bool = True
+
+
+class BuilderFlareCreate(BuilderFlareBase):
+    project_id: uuid.UUID
 
 
 class BuilderFlareUpdate(BaseModel):
@@ -33,22 +37,13 @@ class BuilderFlareUpdate(BaseModel):
     remote: Optional[bool] = None
 
 
-class BuilderFlareResponse(BaseModel):
+class BuilderFlareResponse(BuilderFlareBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
     project_id: uuid.UUID
     created_by: uuid.UUID
-    title: str
-    description: str
-    role: str
-    location: Optional[str] = None
-    commitment: Optional[str] = None
-    experience_level: Optional[str] = None
-    openings: int
     applicants_count: int
-    status: FlareStatus
     featured: bool
-    remote: bool
     created_at: datetime
     updated_at: datetime

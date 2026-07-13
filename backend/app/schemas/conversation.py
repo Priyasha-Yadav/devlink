@@ -4,16 +4,19 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel, ConfigDict
-
 from app.models.conversation import ConversationType
 
 
-class ConversationCreate(BaseModel):
+class ConversationBase(BaseModel):
     type: ConversationType = ConversationType.DIRECT
     title: Optional[str] = None
     project_id: Optional[uuid.UUID] = None
-    created_by: uuid.UUID
+
+
+class ConversationCreate(ConversationBase):
+    pass
 
 
 class ConversationUpdate(BaseModel):
@@ -22,13 +25,10 @@ class ConversationUpdate(BaseModel):
     archived: Optional[bool] = None
 
 
-class ConversationResponse(BaseModel):
+class ConversationResponse(ConversationBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
-    type: ConversationType
-    title: Optional[str] = None
-    project_id: Optional[uuid.UUID] = None
     created_by: uuid.UUID
     is_active: bool
     archived: bool
