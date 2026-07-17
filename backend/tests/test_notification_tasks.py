@@ -216,7 +216,7 @@ def test_router_enqueue_integration():
 
     b_tok = r.json()["access_token"]
 
-    r = client.post(f"/followers/{a_id}", headers={"Authorization": f"Bearer {b_tok}"})
+    r = client.post(f"/api/followers/{a_id}", headers={"Authorization": f"Bearer {b_tok}"})
     assert r.status_code == 201
 
     notifs = client.get(
