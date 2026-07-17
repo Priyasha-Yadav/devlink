@@ -36,14 +36,16 @@ class IdempotentRoute(APIRoute):
 
             if redis_client is None:
                 # Fallback if Redis is down
-                logger.warning("Redis client is not available. Bypassing idempotency check.")
+                logger.warning(
+                    "Redis client is not available. Bypassing idempotency check."
+                )
                 return await original_route_handler(request)
 
             # Ensure uniqueness by user if auth exists, otherwise just key
             user_id = "anonymous"
             if "Authorization" in request.headers:
                 user_id = "authenticated"
-                
+
             cache_key = f"idempotent:{user_id}:{idempotency_key}"
 
             # Check cache
@@ -51,10 +53,10 @@ class IdempotentRoute(APIRoute):
                 cached_data_str = redis_client.get(cache_key)
                 if cached_data_str:
                     data = json.loads(cached_data_str)
-                    
+
                     headers = data.get("headers", {})
                     headers["X-Idempotent-Cache"] = "hit"
-                    
+
                     return Response(
                         content=data["body"],
                         status_code=data["status_code"],
@@ -71,12 +73,14 @@ class IdempotentRoute(APIRoute):
             if not is_new:
                 # Another request is currently processing this key
                 return Response(
-                    content=json.dumps({"success": False, "message": "Request already in progress"}),
+                    content=json.dumps(
+                        {"success": False, "message": "Request already in progress"}
+                    ),
                     status_code=409,
-                    media_type="application/json"
+                    media_type="application/json",
                 )
-                
-            redis_client.expire(lock_key, 60) # 60 second lock
+
+            redis_client.expire(lock_key, 60)  # 60 second lock
 
             try:
                 # Process the request
@@ -90,7 +94,9 @@ class IdempotentRoute(APIRoute):
                         "body": response.body.decode("utf-8"),
                         "media_type": response.media_type,
                     }
-                    redis_client.setex(cache_key, 86400, json.dumps(cache_payload)) # cache for 24 hours
+                    redis_client.setex(
+                        cache_key, 86400, json.dumps(cache_payload)
+                    )  # cache for 24 hours
             finally:
                 redis_client.delete(lock_key)
 
