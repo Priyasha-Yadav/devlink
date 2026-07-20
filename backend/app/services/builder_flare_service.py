@@ -40,7 +40,7 @@ class BuilderFlareService:
         )
 
         db.add(db_flare)
-        db.commit()
+        db.flush()
         db.refresh(db_flare)
 
         return db_flare
@@ -85,7 +85,7 @@ class BuilderFlareService:
         for key, value in data.items():
             setattr(db_flare, key, value)
 
-        db.commit()
+        db.flush()
         db.refresh(db_flare)
 
         return db_flare
@@ -98,7 +98,7 @@ class BuilderFlareService:
 
         db_flare.status = "closed"
 
-        db.commit()
+        db.flush()
         db.refresh(db_flare)
 
         return db_flare
@@ -110,4 +110,4 @@ class BuilderFlareService:
     ) -> None:
 
         db.delete(db_flare)
-        db.commit()
+        db.flush()

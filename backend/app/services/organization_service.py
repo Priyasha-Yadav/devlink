@@ -44,7 +44,7 @@ class OrganizationService:
         )
 
         db.add(db_organization)
-        db.commit()
+        db.flush()
         db.refresh(db_organization)
 
         return db_organization
@@ -129,7 +129,7 @@ class OrganizationService:
         for key, value in data.items():
             setattr(db_organization, key, value)
 
-        db.commit()
+        db.flush()
         db.refresh(db_organization)
 
         return db_organization
@@ -142,7 +142,7 @@ class OrganizationService:
 
         db_organization.verified = True
 
-        db.commit()
+        db.flush()
         db.refresh(db_organization)
 
         return db_organization
@@ -155,7 +155,7 @@ class OrganizationService:
 
         db_organization.hiring = True
 
-        db.commit()
+        db.flush()
         db.refresh(db_organization)
 
         return db_organization
@@ -168,7 +168,7 @@ class OrganizationService:
 
         db_organization.hiring = False
 
-        db.commit()
+        db.flush()
         db.refresh(db_organization)
 
         return db_organization
@@ -181,7 +181,7 @@ class OrganizationService:
 
         db_organization.active = False
 
-        db.commit()
+        db.flush()
         db.refresh(db_organization)
 
         return db_organization
@@ -194,7 +194,7 @@ class OrganizationService:
 
         db_organization.active = True
 
-        db.commit()
+        db.flush()
         db.refresh(db_organization)
 
         return db_organization
@@ -206,4 +206,4 @@ class OrganizationService:
     ) -> None:
 
         db.delete(db_organization)
-        db.commit()
+        db.flush()
