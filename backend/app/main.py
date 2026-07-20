@@ -40,6 +40,7 @@ from app.routers import (
     notifications,
     organizations,
     projects,
+    recommendations,
     repositories,
     skills,
     users,
@@ -191,4 +192,5 @@ app.include_router(repositories.router)
 app.include_router(organizations.router)
 app.include_router(applications.router)
 app.include_router(skills.router)
+app.include_router(recommendations.router)
 app.include_router(health.router)
