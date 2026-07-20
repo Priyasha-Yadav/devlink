@@ -3,9 +3,13 @@ from __future__ import annotations
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+# pyrefly: ignore [missing-import]
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
-from app.database.session import get_db
+from app.dependencies import get_database
 from app.dependencies import get_current_user
 from app.middleware.rate_limit import limiter, SEARCH_LIMIT
 from app.models.user import User
@@ -29,20 +33,13 @@ router = APIRouter(
 )
 def create_skill(
     skill: SkillCreate,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_database),
     current_user: User = Depends(get_current_user),
 ):
-
-    if SkillService.get_by_name(db, skill.name):
-        raise HTTPException(
-            status_code=400,
-            detail="Skill already exists",
-        )
-
-    return SkillService.create_skill(
-        db=db,
-        skill=skill,
-    )
+    try:
+        return SkillService.create_skill(db=db, skill=skill)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.get(
@@ -51,9 +48,8 @@ def create_skill(
 )
 def get_skill(
     skill_id: uuid.UUID,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_database),
 ):
-
     skill = SkillService.get_skill(
         db,
         skill_id,
@@ -74,9 +70,8 @@ def get_skill(
 )
 def get_skill_by_slug(
     slug: str,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_database),
 ):
-
     skill = SkillService.get_by_slug(
         db,
         slug,
@@ -100,9 +95,8 @@ def list_skills(
     request: Request,
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_database),
 ):
-
     return SkillService.list_skills(
         db,
         skip,
@@ -118,9 +112,8 @@ def list_skills(
 def search_skills(
     request: Request,
     keyword: str,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_database),
 ):
-
     return SkillService.search_skills(
         db,
         keyword,
@@ -134,9 +127,8 @@ def search_skills(
 def update_skill(
     skill_id: uuid.UUID,
     skill: SkillUpdate,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_database),
 ):
-
     db_skill = SkillService.get_skill(
         db,
         skill_id,
@@ -148,11 +140,10 @@ def update_skill(
             detail="Skill not found",
         )
 
-    return SkillService.update_skill(
-        db,
-        db_skill,
-        skill,
-    )
+    try:
+        return SkillService.update_skill(db, db_skill, skill)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.delete(
@@ -161,9 +152,8 @@ def update_skill(
 )
 def delete_skill(
     skill_id: uuid.UUID,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_database),
 ):
-
     db_skill = SkillService.get_skill(
         db,
         skill_id,
