@@ -50,6 +50,7 @@ class ProjectService:
 
         # Create ProjectMember record for owner
         from app.models.project_member import ProjectMember, MemberRole
+
         member = ProjectMember(
             project_id=db_project.id,
             user_id=owner_id,

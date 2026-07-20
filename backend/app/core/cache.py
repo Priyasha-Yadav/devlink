@@ -18,6 +18,7 @@ class MultiLevelCache:
 
     def __init__(self):
         import sys
+
         is_testing = "pytest" in sys.modules
         self._l1_cache: Dict[str, Tuple[Any, float]] = {}
         self._redis_client: Optional[redis.Redis] = None
@@ -107,6 +108,7 @@ def cached(ttl: int = 300, key_prefix: str = ""):
         @wraps(func)
         def wrapper(*args, **kwargs):
             import sys
+
             if "pytest" in sys.modules:
                 return func(*args, **kwargs)
 

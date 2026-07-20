@@ -8,6 +8,7 @@ from app.core.config import settings
 # ------------------------------------------------------------------
 
 import sys
+
 is_testing = "pytest" in sys.modules
 
 limiter = Limiter(
@@ -32,4 +33,6 @@ SEARCH_LIMIT = "1000000/minute" if is_testing else settings.SEARCH_RATE_LIMIT
 
 PROJECT_LIMIT = "1000000/minute" if is_testing else settings.PROJECT_RATE_LIMIT
 
-PASSWORD_RESET_LIMIT = "1000000/minute" if is_testing else settings.PASSWORD_RESET_RATE_LIMIT
+PASSWORD_RESET_LIMIT = (
+    "1000000/minute" if is_testing else settings.PASSWORD_RESET_RATE_LIMIT
+)

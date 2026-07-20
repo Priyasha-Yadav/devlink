@@ -49,6 +49,7 @@ class OrganizationService:
 
         # Create OrganizationMember record for owner
         from app.models.organization_member import OrganizationMember, OrgMemberRole
+
         member = OrganizationMember(
             organization_id=db_organization.id,
             user_id=owner_id,

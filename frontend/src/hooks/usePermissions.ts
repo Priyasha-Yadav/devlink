@@ -23,7 +23,7 @@ export function usePermissions(currentUserId?: string, isSuperuser = false) {
 
       // Extract current user membership record if target has members list
       const member = target?.members?.find(
-        (m) => m.userId === currentUserId || m.user_id === currentUserId
+        (m) => m.userId === currentUserId || m.user_id === currentUserId,
       );
       const userRole = member?.role;
 
@@ -55,7 +55,7 @@ export function usePermissions(currentUserId?: string, isSuperuser = false) {
           return false;
       }
     },
-    [currentUserId, isSuperuser]
+    [currentUserId, isSuperuser],
   );
 
   return { can };

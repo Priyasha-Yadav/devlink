@@ -150,17 +150,20 @@ def get_current_admin(
 
 from app.core.rbac import has_org_permission, has_project_permission
 
+
 def require_org_permission(action: str):
     """
     Dependency factory to check organization level permissions.
     Raises 404 if the org doesn't exist, 403 if the user lacks permission.
     """
+
     def dependency(
         organization_id: UUID,
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_database),
     ) -> User:
         from app.models.organization import Organization as OrgModel
+
         org = db.get(OrgModel, organization_id)
         if not org:
             raise HTTPException(
@@ -173,6 +176,7 @@ def require_org_permission(action: str):
                 detail="Permission denied.",
             )
         return current_user
+
     return dependency
 
 
@@ -181,12 +185,14 @@ def require_project_permission(action: str):
     Dependency factory to check project level permissions.
     Raises 404 if the project doesn't exist, 403 if the user lacks permission.
     """
+
     def dependency(
         project_id: UUID,
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_database),
     ) -> User:
         from app.models.project import Project as ProjectModel
+
         project = db.get(ProjectModel, project_id)
         if not project:
             raise HTTPException(
@@ -199,4 +205,5 @@ def require_project_permission(action: str):
                 detail="Permission denied.",
             )
         return current_user
+
     return dependency
