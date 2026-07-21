@@ -42,7 +42,7 @@ describe("Form Validation Schemas", () => {
       expect(shortPassword.success).toBe(false);
       if (!shortPassword.success) {
         expect(shortPassword.error.flatten().fieldErrors.password).toContain(
-          "At least 8 characters"
+          "At least 8 characters",
         );
       }
     });
@@ -216,9 +216,7 @@ describe("Form Validation Schemas", () => {
         const fieldErrors = result.error.flatten().fieldErrors;
         expect(fieldErrors.title).toContain("Title must be at least 3 characters");
         expect(fieldErrors.tagline).toContain("Tagline cannot exceed 150 characters");
-        expect(fieldErrors.description).toContain(
-          "Description must be at least 10 characters"
-        );
+        expect(fieldErrors.description).toContain("Description must be at least 10 characters");
         expect(fieldErrors.stage).toContain("Invalid project stage");
         expect(fieldErrors.repository_url).toContain("Must be a valid URL");
         expect(fieldErrors.demo_url).toContain("Must be a valid URL");
@@ -322,9 +320,7 @@ describe("Form Validation Schemas", () => {
         expect(result.success).toBe(false);
         if (!result.success) {
           const fieldErrors = result.error.flatten().fieldErrors;
-          expect(fieldErrors.new_password).toContain(
-            "New password must be at least 8 characters"
-          );
+          expect(fieldErrors.new_password).toContain("New password must be at least 8 characters");
           expect(fieldErrors.confirm_new_password).toContain("New passwords must match");
         }
       });

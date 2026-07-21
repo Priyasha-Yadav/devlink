@@ -1,10 +1,12 @@
 import { z } from "zod";
 
 // Helper for optional URL fields that allow empty string
-const optionalUrl = z.string().optional().refine(
-  (val) => !val || val.trim() === "" || z.string().url().safeParse(val).success,
-  { message: "Must be a valid URL" }
-);
+const optionalUrl = z
+  .string()
+  .optional()
+  .refine((val) => !val || val.trim() === "" || z.string().url().safeParse(val).success, {
+    message: "Must be a valid URL",
+  });
 
 // 1. Login Form Schema
 export const loginSchema = z.object({
