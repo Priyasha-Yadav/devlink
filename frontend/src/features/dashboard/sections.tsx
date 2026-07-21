@@ -178,7 +178,6 @@ export function SuggestedBuilders() {
   );
 }
 
-
 export function TrendingProjects() {
   const { data = [] } = useQuery({ queryKey: ["trending"], queryFn: projectsService.trending });
   return (
