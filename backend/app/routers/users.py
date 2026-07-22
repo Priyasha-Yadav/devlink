@@ -299,7 +299,7 @@ def report_user(
         reported_id=target_user.id,
         reason=report.reason,
         description=report.description,
-        status="pending"
+        status="pending",
     )
 
     db.add(db_report)

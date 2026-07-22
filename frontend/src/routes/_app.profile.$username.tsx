@@ -2,7 +2,14 @@ import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-ro
 import { Card, TagChip, Avatar } from "@/components/shared/primitives";
 import { LastActive } from "@/components/shared/LastActive";
 import { builders, currentUser, projects } from "@/mocks/seed";
-import { MapPin, Calendar, Link as LinkIcon, MessageCircle, Mail, AlertTriangle } from "lucide-react";
+import {
+  MapPin,
+  Calendar,
+  Link as LinkIcon,
+  MessageCircle,
+  Mail,
+  AlertTriangle,
+} from "lucide-react";
 import { toast } from "sonner";
 import { copyText } from "@/lib/clipboard";
 import { ReportUserModal } from "@/components/shared/ReportUserModal";
@@ -145,7 +152,7 @@ function ProfilePage() {
                   <MessageCircle size={16} />
                   Contact Developer
                 </button>
-                <button 
+                <button
                   onClick={() => setIsReportModalOpen(true)}
                   className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-[13px] font-semibold text-destructive hover:bg-destructive/20 transition-colors flex items-center gap-1"
                 >
@@ -158,11 +165,11 @@ function ProfilePage() {
       </Card>
 
       {!me && (
-        <ReportUserModal 
-          isOpen={isReportModalOpen} 
-          onClose={() => setIsReportModalOpen(false)} 
-          userId={b.id || ""} 
-          username={b.handle} 
+        <ReportUserModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          userId={b.id || ""}
+          username={b.handle}
         />
       )}
 

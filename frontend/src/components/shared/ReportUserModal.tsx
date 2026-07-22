@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { usersApi } from "@/api/modules/users";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/shared/primitives"; // assuming these are available or we can use standard divs if not
 
 export interface ReportUserModalProps {
   isOpen: boolean;
@@ -15,7 +14,7 @@ const REPORT_REASONS = [
   "Harassment or hate speech",
   "Inappropriate profile content",
   "Pretending to be someone else",
-  "Other"
+  "Other",
 ];
 
 export function ReportUserModal({ isOpen, onClose, userId, username }: ReportUserModalProps) {
@@ -56,7 +55,9 @@ export function ReportUserModal({ isOpen, onClose, userId, username }: ReportUse
                 onChange={(e) => setReason(e.target.value)}
               >
                 {REPORT_REASONS.map((r) => (
-                  <option key={r} value={r}>{r}</option>
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
                 ))}
               </select>
             </div>

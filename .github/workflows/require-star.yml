@@ -41,6 +41,7 @@ jobs:
 
             if echo "$RESPONSE" | jq -e '.message' >/dev/null 2>&1; then
               echo "$RESPONSE"
+            fi
             USERS=$(curl -s "https://api.github.com/repos/$OWNER/$REPO/stargazers?per_page=100&page=$PAGE" \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}")
