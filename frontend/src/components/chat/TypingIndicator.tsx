@@ -11,13 +11,7 @@ import { cn } from "@/lib/utils";
  *             omitted, only the dots are rendered.
  *   className - extra classes for the wrapper.
  */
-export function TypingIndicator({
-  label,
-  className,
-}: {
-  label?: string;
-  className?: string;
-}) {
+export function TypingIndicator({ label, className }: { label?: string; className?: string }) {
   return (
     <div
       className={cn(
