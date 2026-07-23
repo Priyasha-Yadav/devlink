@@ -12,12 +12,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -47,7 +42,11 @@ describe("Button", () => {
 
   it("does not call onClick when disabled", async () => {
     const handler = vi.fn();
-    render(<Button disabled onClick={handler}>Disabled</Button>);
+    render(
+      <Button disabled onClick={handler}>
+        Disabled
+      </Button>,
+    );
     await userEvent.click(screen.getByRole("button", { name: "Disabled" }));
     expect(handler).not.toHaveBeenCalled();
   });
@@ -271,9 +270,7 @@ describe("Avatar", () => {
   });
 
   it("shows StatusDot when online prop is provided", () => {
-    const { container } = render(
-      <Avatar src="https://example.com/avatar.png" alt="User" online />,
-    );
+    const { container } = render(<Avatar src="https://example.com/avatar.png" alt="User" online />);
     expect(container.querySelector(".animate-ping")).toBeInTheDocument();
   });
 
