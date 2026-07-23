@@ -187,13 +187,15 @@ class User(Base):
     )
 
     last_seen: Mapped[datetime | None] = mapped_column(
-        last_active_at: Mapped[datetime | None] = mapped_column(
         DateTime,
         default=datetime.utcnow,
-        )
         nullable=True,
     )
-
+    last_active_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=True,
+    )
     # ------------------------------------------------------------------
     # OAuth
     # ------------------------------------------------------------------
