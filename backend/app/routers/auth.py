@@ -8,11 +8,19 @@ from fastapi import (
     Request,
     status,
 )
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+import httpx
+from app.core.config import settings
+from app.core.security import (
+    decode_token,
+    is_refresh_token,
+    create_verification_token,
+)
 
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 
-from app.database.session import get_db
 from app.middleware.rate_limit import (
     limiter,
     LOGIN_LIMIT,
@@ -25,8 +33,19 @@ from app.schemas.auth import (
     ForgotPasswordRequest,
     LoginRequest,
     RegisterRequest,
+    GitHubLoginRequest,
+    RefreshTokenRequest,
+    LogoutResponse,
+    CurrentUserResponse,
+    ChangePasswordRequest,
+    ForgotPasswordResponse,
+    ResetPasswordRequest,
+    SuccessResponse,
+    VerifyEmailRequest,
+    VerifyEmailResponse,
+    ResendVerificationEmailRequest,
 )
-from app.schemas.user import UserResponse, CurrentUser
+from app.schemas.user import CurrentUser
 from app.services.auth_service import AuthService
 
 router = APIRouter(
@@ -86,9 +105,7 @@ def login(
     return auth_service.login(payload)
 
 
-import httpx
-from app.schemas.auth import GitHubLoginRequest
-from app.core.config import settings
+
 
 @router.post(
     "/github",
@@ -177,19 +194,7 @@ async def github_login(
     return auth_service.github_login(github_user, primary_email)
 
 
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from app.core.security import (
-    decode_token,
-    is_refresh_token,
-    create_verification_token,
-    is_verification_token,
-)
-from app.schemas.auth import (
-    RefreshTokenRequest,
-    LogoutResponse,
-    CurrentUserResponse,
-)
 
 security = HTTPBearer()
 
@@ -299,16 +304,7 @@ def logout(
     return auth_service.logout(user_id)
 
 
-from app.schemas.auth import (
-    ChangePasswordRequest,
-    ForgotPasswordRequest,
-    ForgotPasswordResponse,
-    ResetPasswordRequest,
-    SuccessResponse,
-    VerifyEmailRequest,
-    VerifyEmailResponse,
-    ResendVerificationEmailRequest,
-)
+
 
 # ==========================================================
 # Change Password
@@ -477,7 +473,7 @@ def resend_verification(
         }
 
     # Generate verification token
-    token = create_verification_token(str(user.id))
+    create_verification_token(str(user.id))
     # TODO:
     # Send email via SMTP
 
