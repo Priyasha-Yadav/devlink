@@ -228,6 +228,9 @@ def test_restore_message_not_found(client: TestClient, test_conversation):
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 404
+
+
+
 # ------------------------------------------------------------------
 # Typing indicator  (issue #337)
 # ------------------------------------------------------------------
