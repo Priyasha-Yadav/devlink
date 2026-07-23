@@ -1,20 +1,26 @@
-import { createFileRoute, Link, useNavigate, useChildMatches, Outlet } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  useNavigate,
+  useChildMatches,
+  Outlet,
+} from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { buildersService } from "@/services";
 import type { Builder } from "@/services";
-import { Card, AnimatedCard, TagChip, Avatar, Skeleton, EmptyState } from "@/components/shared/primitives";
+import {
+  Card,
+  AnimatedCard,
+  TagChip,
+  Avatar,
+  Skeleton,
+  EmptyState,
+} from "@/components/shared/primitives";
 import { HighlightText } from "@/components/shared/HighlightText";
 import { LastActive } from "@/components/shared/LastActive";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import {
-  Search,
-  Sparkles,
-  Calendar,
-  Briefcase,
-  Check,
-  Bookmark,
-} from "lucide-react";
+import { Search, Sparkles, Calendar, Briefcase, Check, Bookmark } from "lucide-react";
 import { motion } from "framer-motion";
 import { containerVariants } from "@/lib/animations";
 
@@ -231,7 +237,6 @@ function BuildersPage() {
     });
   };
 
-  // If a child route (e.g. /builders/$builderId) is matched, render its outlet directly
   if (childMatches.length > 0) {
     return <Outlet />;
   }
@@ -358,7 +363,12 @@ function BuildersPage() {
           {filtered.map((b, i) => {
             const isConnected = connections.includes(b.id);
             return (
-              <AnimatedCard key={b.id} interactive index={i} className="p-4 text-center h-full flex flex-col justify-between">
+              <AnimatedCard
+                key={b.id}
+                interactive
+                index={i}
+                className="p-4 text-center h-full flex flex-col justify-between"
+              >
                 <Link
                   to="/builders/$builderId"
                   params={{ builderId: b.id }}
