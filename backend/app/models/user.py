@@ -189,6 +189,10 @@ class User(Base):
     last_seen: Mapped[datetime | None] = mapped_column(
         DateTime, default=datetime.utcnow, nullable=True
     )
+        DateTime(timezone=True),
+        nullable=True,
+    )
+
     last_active_at: Mapped[datetime | None] = mapped_column(
         DateTime, default=datetime.utcnow, nullable=True
     )
@@ -247,6 +251,7 @@ class User(Base):
         last_seen = self.last_seen
         if last_seen.tzinfo is None:
             last_seen = last_seen.replace(tzinfo=timezone.utc)
+
         return (now - last_seen).total_seconds() < threshold
 
     # ------------------------------------------------------------------
